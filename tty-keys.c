@@ -655,6 +655,7 @@ tty_keys_next1(struct tty *tty, const char *buf, size_t len, key_code *key,
 	return (-1);
 }
 
+void add_input_key(key_code key, const char *buf, size_t len);
 /* Process at least one key in the buffer. Return 0 if no keys present. */
 int
 tty_keys_next(struct tty *tty)
@@ -748,6 +749,7 @@ tty_keys_next(struct tty *tty)
 	/* Is this an extended key press? */
 	switch (tty_keys_extended_key(tty, buf, len, &size, &key)) {
 	case 0:		/* yes */
+                add_input_key(key, buf, len);
 		goto complete_key;
 	case -1:	/* no, or not valid */
 		break;
@@ -985,7 +987,7 @@ tty_keys_extended_key(struct tty *tty, const char *buf, size_t len,
 		    onlykey != 13 &&
 		    onlykey != 27)
 			/* nothing */;
-		else if (onlykey >= 97 && onlykey <= 122)
+		else if (onlykey >= 97 && onlykey <= 122 && onlykey != 105)
 			onlykey -= 96;
 		else if (onlykey >= 64 && onlykey <= 95)
 			onlykey -= 64;

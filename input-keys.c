@@ -49,6 +49,11 @@ struct input_key_tree input_key_tree = RB_INITIALIZER(&input_key_tree);
 
 /* List of default keys, the tree is built from this. */
 static struct input_key_entry input_key_defaults[] = {
+	/* Ctrl+i. */
+	// { .key = 0x69 | KEYC_CTRL, 
+	//   .data = "\x1b[105;5u"
+	// }, //this also works
+
 	/* Paste keys. */
 	{ .key = KEYC_PASTE_START,
 	  .data = "\033[200~"
@@ -365,6 +370,18 @@ input_key_split2(u_int c, u_char *dst)
 	}
 	dst[0] = c;
 	return (1);
+}
+
+void add_input_key(key_code key, const char *buf, size_t len) 
+{
+	struct input_key_entry *ike = input_key_get(key);
+	if (ike == NULL){
+		struct input_key_entry *new;
+		new = xcalloc(1, sizeof *new);
+		new->key = key;
+		new->data = xstrndup(buf, len);
+		RB_INSERT(input_key_tree, &input_key_tree, new);
+	}
 }
 
 /* Build input key tree. */
