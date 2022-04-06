@@ -49,6 +49,11 @@ struct input_key_tree input_key_tree = RB_INITIALIZER(&input_key_tree);
 
 /* List of default keys, the tree is built from this. */
 static struct input_key_entry input_key_defaults[] = {
+    /* Ctrl+i. */
+    { .key = 0x69 | KEYC_CTRL, 
+      .data = "\x1b[105;5u"
+    },
+
 	/* Paste keys. */
 	{ .key = KEYC_PASTE_START,
 	  .data = "\033[200~"
