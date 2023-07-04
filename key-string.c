@@ -282,7 +282,7 @@ key_string_lookup_string(const char *string)
 	}
 
 	/* Convert the standard control keys. */
-	if (key <= 127 &&
+	if (key <= 127 && key != 105 &&
 	    (modifiers & KEYC_CTRL) &&
 	    strchr(other, key) == NULL &&
 	    key != 9 &&
